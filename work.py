@@ -1,10 +1,9 @@
 
 # This file is part of Tryton.  The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+
+from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
-from trytond.pyson import Eval
-from decimal import Decimal
 from trytond.transaction import Transaction
 __all__ = ['ShipmentWork', 'ProjectSummary', 'Work']
 
@@ -27,6 +26,8 @@ class ShipmentWork:
     def get_total(cls, shipments, names):
         limit_date = Transaction().context.get('limit_date')
         res = {}
+        pool = Pool()
+        Work = pool.get('project.work')
         for name in Work._get_summary_fields():
             res[name] = {}
 
@@ -37,7 +38,8 @@ class ShipmentWork:
         # Calc progress_shipments
         progress_shipments = []
         for shipment in shipments:
-            if limit_date != None and shipment.done_date > limit_date:
+            if (limit_date != None and shipment.done_date != None and
+                    shipment.done_date > limit_date):
                 continue
             progress_shipments.append(shipment)
 
