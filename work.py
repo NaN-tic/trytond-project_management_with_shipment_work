@@ -31,10 +31,6 @@ class ShipmentWork:
         for name in Work._get_summary_fields():
             res[name] = {}
 
-        # Calc teorical cost and revenue
-        # TODO: return values from generated sale.
-        res.update(cls.get_cost(shipments, ['cost', 'revenue']))
-
         # Calc progress_shipments
         progress_shipments = []
         for shipment in shipments:
@@ -43,7 +39,7 @@ class ShipmentWork:
                 continue
             progress_shipments.append(shipment)
 
-        res_p = cls.get_cost(shipments, ['cost', 'revenue'])
+        res_p = cls.get_cost(progress_shipments, ['cost', 'revenue'])
         res['progress_revenue'] = res_p['revenue']
         res['progress_cost'] = res_p['cost']
 
