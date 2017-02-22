@@ -16,8 +16,11 @@ class ShipmentWork:
 
     @classmethod
     def pending(cls, shipments):
+        pool = Pool()
+        WorkProject = pool.get('work.project')
         for shipment in shipments:
-            shipment.work_project = shipment.origin
+            if shipment.origin and isinstance(shipment.origin, WorkProject):
+                shipment.work_project = shipment.origin
 
         cls.save(shipments)
         super(ShipmentWork, cls).pending(shipments)
