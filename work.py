@@ -1,10 +1,10 @@
 
 # This file is part of Tryton.  The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.transaction import Transaction
+
 __all__ = ['ShipmentWork', 'ProjectSummary', 'Work']
 
 
@@ -16,8 +16,8 @@ class ShipmentWork:
 
     @classmethod
     def pending(cls, shipments):
-        pool = Pool()
-        WorkProject = pool.get('work.project')
+        WorkProject = Pool().get('work.project')
+
         for shipment in shipments:
             if shipment.origin and isinstance(shipment.origin, WorkProject):
                 shipment.work_project = shipment.origin
@@ -27,10 +27,10 @@ class ShipmentWork:
 
     @classmethod
     def get_total(cls, shipments, names):
+        Work = Pool().get('project.work')
+
         limit_date = Transaction().context.get('limit_date')
         res = {}
-        pool = Pool()
-        Work = pool.get('project.work')
         for name in Work._get_summary_fields():
             res[name] = {}
 
@@ -54,7 +54,6 @@ class ShipmentWork:
 
 
 class Work:
-    'Work Project'
     __name__ = 'project.work'
     __metaclass__ = PoolMeta
 
@@ -65,7 +64,6 @@ class Work:
 
 
 class ProjectSummary:
-
     __name__ = 'project.work.summary'
     __metaclass__ = PoolMeta
 
